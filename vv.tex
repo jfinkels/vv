@@ -1,0 +1,132 @@
+\documentclass{article}
+
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{complexity}
+
+%% Theorem definitions
+\declaretheorem[numberwithin=section]{theorem}
+\declaretheorem[numberlike=theorem]{corollary}
+\declaretheorem[numberlike=theorem]{lemma}
+\declaretheorem[numberlike=theorem, style=definition]{definition}
+
+%% Custom commands
+\newcommand{\existsu}{\exists !}
+\newcommand{\random}{\overset{R}{\gets}}
+\newcommand{\PSAT}{\textsc{$\log^k n$-Partial $\NC^d$ Satisfiability}}
+\newcommand{\UPSAT}{\textsc{Unambiguous $\log^k n$-Partial $\NC^d$ Satisfiability}}
+
+\begin{document}
+
+These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordpress.com/2010/04/29/cs254-lecture-7-valiant-vazirani} and some of Arora and Barak's explanation.
+
+\begin{definition}
+  An \emph{$\NC^d$ circuit} is a Boolean circuit with fan-in two, polynomial size, and $O(\log^d n)$ depth.
+\end{definition}
+
+\begin{definition}
+  $\NNC^d(\log^k n)$ is the class of languages decided by \L-uniform $\NC^d$ circuits augmented with $O(\log^k n)$ nondeterministic gates.
+  $\UNC^d(\log^k n)$ is the subset of $\NNC^d(\log^k n)$ in which strings in the language have exactly one witness and strings not in the language have no witnesses.
+  $\RNC^d(\log^k n)$ is the class of languages decided by \L-uniform $\NC^d$ circuits augmented with $O(\log^k n)$ bits of randomness that have soundness 1 and completeness $\frac{1}{2}$.
+\end{definition}
+
+\begin{definition}
+  A collection of functions $\mathcal{H}_{n, m}$ from $\{0, 1\}^n$ to $\{0, 1\}^m$ is a \emph{pairwise independent hash family} if
+  \begin{enumerate}
+  \item ...
+  \item ...
+  \end{enumerate}
+\end{definition}
+
+\begin{lemma}\label{lem:hash}
+  There is a pairwise independent hash family consisting of functions that are computable by an $\NC^d$ circuit.
+\end{lemma}
+
+\begin{lemma}\label{lem:vv}
+  Suppose $n$ and $m$ are positive integers, $\mathcal{H}_{n, m}$ is a pairwise independent hash family, and $S$ is a subset of $\{0, 1\}^n$.
+  If $2^{m - 2} \leq |S| \leq 2^{m - 1}$ then
+  \begin{equation*}
+    \Pr_{h \random \mathcal{H}_{n, m}}\left[\existsu x \in S \colon h(x) = 0^m \right] \geq \frac{1}{8}.
+  \end{equation*}
+\end{lemma}
+
+\begin{definition}
+  If $C$ is a Boolean circuit with inputs $x_1, \dotsc, x_n$, a \emph{partial assignment} to its inputs is a function $\alpha \colon S \to \{0, 1\}$, where $S$ is some subset of $\{x_1, \dotsc, x_n\}$.
+  The partial assignment is called a \emph{complete assignment}, or simply an \emph{assignment}, if $|S| = n$.
+  For any fixed partial assignment $\alpha$ with domain $S$, an \emph{extension assignment}, or simply an \emph{extension}, is a partial assignment with domain $(\{x_1, \dotsc, x_n\} \setminus S)$.
+  (Thus, if $\beta$ is an extension of $\alpha$, then $\alpha \cup \beta$ is a complete assignment.)
+\end{definition}
+
+\begin{theorem}[Valiant--Vazirani]
+  There is a probabilistic logarithmic space computable function $f$ such that for all Boolean circuits $C$ on $n$ inputs with fan-in two and depth $O(\log^d n)$, and all partial assignments $\alpha$ to all but the first $\log^k n$ of the inputs, the following conditions are satisfied.
+  \begin{itemize}
+  \item $f(C, \alpha)$ outputs a circuit $C'$ and a partial assignment to its inputs $\alpha'$.
+  \item If there is an extension of $\alpha$ that satisfies $C$ then with probability $\frac{1}{8 \log^k n}$ there is a \emph{unique} extension of $\alpha'$ that satisfies $C'$.
+  \item If there is no extension of $\alpha$ that satisfies $C$ then with probability 1 there is no extension of $\alpha'$ that satisfies $C'$.
+  \end{itemize}
+  The probabilities are over the uniform random bits used by $f$.
+\end{theorem}
+\begin{proof}
+  Let $\mathcal{H}_{\log^k n, m}$ be a pairwise independent hash family computable in $\NC^d$, as guaranteed by \autoref{lem:hash}.
+  Define the function $f$ as follows on input circuit $C$ and partial assignment given as bits $x_{\log^k n + 1}, \dotsc, x_n$.
+  \begin{enumerate}
+  \item Choose $m$ uniformly at random from $\{2, \dotsc, \log^k n + 1\}$.
+  \item Choose $h$ uniformly at random from $\mathcal{H}_{\log^k n, m}$.
+  \item
+    Let $C'(x_1, \dotsc, x_n)$ be the circuit computing $(C(x_1, \dotsc, x_n) = 1) \land (h(x_1 \circ \dotsb \circ x_{\log^k n}) == 0^m)$.
+    (We only use the the first $\log^k n$ bits of the input in the hash function because we expect a partial assignment to fix the value of the remaining inputs.)
+  \item Output $C'$ and the same partial assignment $\alpha$.
+  \end{enumerate}
+  The probability that $m$ is chosen such that the number of satisfying assignments to the original circuit $C$ is between $2^{m - 2}$ and $2^{m - 1}$ is $\frac{1}{\log^k n}$.
+  Conditioned on that event, the probability that $h$ is chosen as in \autoref{lem:vv} is at least $\frac{1}{8}$.
+  Thus if there is an extension of $\alpha$ satisfying $C$ then the probability that there is a unique extension satisfying $C'$ is at least $\frac{1}{8 \log^k n}$.
+  If the original circuit has no satisfying extension, then neither is $C'$, so the probability that $C'$ has a satisfying extension is 0.
+
+  The efficiency of $f$ is merely the efficiency of constructing the relatively simple circuit $C'$, and so can be computed in logarithmic space.
+  Finally, $f$ uses $\log \log^k n$ random bits, or $k \log \log n$ bits, to choose $m$ (in binary) and uses $O(\log^k n)$ random bits to choose $h$ (\textbf{TODO explain why: see Pseudorandomness}).
+  Thus the total number of random bits used is $O(\log^k n + \log \log n)$.
+\end{proof}
+
+\begin{corollary}
+  Let $d$ be a positive integer (greater than ...) and $k$ be any non-negative integer.
+  If $\NC^d = \UNC^d(\log^k n)$ then $\NNC^d(\log^k n) \subseteq \RNC^d(\log^{2k} n)$.
+\end{corollary}
+\begin{proof}
+  This is a corollary of the proof of the previous theorem.
+  It suffices to show an $\RNC^d$ algorithm for \PSAT, which is a complete problem for $\NNC^d(\log^k n)$ under logarithmic space many-one reductions.
+  By hypothesis, there is an $\NC^d$ algorithm, call it $U$, that decides \UPSAT, which is in $\UNC^d(\log^k n)$.
+
+  Instead of choosing $m$ at random in the first step of the function $f$, we will try all possible values of $m$ in parallel in order to find the correct number of satisfying assignments.
+  Consider an algorithm, call it $A$, that proceeds as follows on inputs $C$ and $\alpha$.
+  \begin{enumerate}
+  \item For each $m \in \{2, \dotsc, \log^k n + 1\}$ in parallel:
+    \begin{enumerate}
+    \item Choose $h$ uniformly at random from $\mathcal{H}_{\log^k n, m}$.
+    \item Let $C'_m$ be the circuit whose construction was described in the previous theorem (that is, step 3 of the definition of $f$).
+    \end{enumerate}
+  \item Accept if and only if $\left(\bigvee_{m=2}^{\log^k n + 1} U(C'_m, \alpha)\right) = 1$.
+  \end{enumerate}
+  If there is at least one satisfying extension for $C$, then exactly one of the $m$ will correspond to the correct number of extensions (specifically, there will be exactly one $m$ such that the number of extensions is between $2^{m - 2}$ and $2^{m - 1}$).
+  The probability that $U$ will accept that $C'_m$ is at least $\frac{1}{8}$, by \autoref{lem:vv}, so $A$ will accept with at least that probability (since it accepts if any of the $U(C'_m, \alpha)$ output 1).
+  As before, if $C$ has no satisfying extensions then neither does any of the $C'$, so $A$ rejects with probability 1.
+
+  In order to get completeness probability to be greater than $\frac{1}{2}$, we amplify the probability of success of $A$ by running some number of independent instances of $A$ in parallel and accepting if and only if at least one of the instances accepts.
+  If each instance has probability at least $\frac{1}{8}$ of accepting, it has probability at most $\frac{7}{8}$ of rejecting.
+  If $t$ instances of $A$ are run independently in parallel, the probability that they all reject is $(\frac{7}{8})^t$.
+  Thus the probability that at least one accepts is $1 - (\frac{7}{8})^t$.
+  This is greater than $\frac{1}{2}$ if $t = 6$.
+  Therefore the overall algorithm, call it $A'$, consists of 6 parallel instances of $A$ with a disjunction at the final layer.
+
+  Starting from the final layer, each instance of $A$ consists of a disjunction of $O(\log^k n)$ instances of the $\NC^d$ circuit $U$.
+  The inputs to each of those instances of $U$ are the outputs from $C'_m$, itself a conjunction of two $\NC^d$ circuits (namely, the circuits for $C$ and $h$).
+  Hence $A$ is an $\NC^d$ circuit, and the disjunction of six instances of $A$ is also an $\NC^d$ circuit.
+  Furthermore, the number of random bits used in this algorithm equals the total number of bits used to choose each of the hash functions $h$.
+  Each hash function requires $O(\log^k n)$ bits, and there are $O(\log^k n)$ of them.
+  Therefore the total number of random bits required is $O(\log^{2k} n)$.
+\end{proof}
+
+TODO can we use randomness-efficient error reduction to reduce the amount of randomness required down to $O(\log^k n)$, thereby allowing the conclusion $\NNC^d(\log^k n) = \RNC^d(\log^k n)$ in the above corollary?
+
+\end{document}
