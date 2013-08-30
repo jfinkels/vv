@@ -60,7 +60,7 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
 \end{definition}
 
 \begin{theorem}[Valiant--Vazirani]
-  There is a probabilistic logarithmic space computable function $f$ such that for all Boolean circuits $C$ on $n$ inputs with fan-in two and depth $O(\log^d n)$, and all partial assignments $\alpha$ to all but the first $\log^k n$ of the inputs, the following conditions are satisfied.
+  There is a probabilistic logarithmic space computable function $f$ such that for all $\NC^d$ circuits $C$ on $n$ inputs, and all partial assignments $\alpha$ to all but the first $\log^k n$ of the inputs, the following conditions are satisfied.
   \begin{itemize}
   \item $f(C, \alpha)$ outputs a circuit $C'$ and a partial assignment to its inputs $\alpha'$.
   \item If there is an extension of $\alpha$ that satisfies $C$ then with probability $\frac{1}{8 \log^k n}$ there is a \emph{unique} extension of $\alpha'$ that satisfies $C'$.
