@@ -91,13 +91,16 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
 
 \begin{corollary}
   Let $d$ be a positive integer (greater than ...) and $k$ be any non-negative integer.
-  If $\NC^d = \UNC^d(\log^k n)$ then $\NNC^d(\log^k n) \subseteq \RNC^d(\log^{2k} n)$.
+  If $\NC^d = \UNC^d(\log^k n)$ then $\NNC^d(\log^k n) \subseteq \RNC^d(\log^{2k} n)$, and furthermore $\NNC^d(\polylog) = \RNC^d(\polylog)$.
 \end{corollary}
 \begin{proof}
+  The ``furthermore'' part of the conclusion follows from the syntactic inclusion $\RNC^d(\log^k n) \subseteq \NNC^d(\log^k n)$, so we will prove that the hypothesis implies $\NNC^d(\log^k n) \subseteq \RNC^d(\log^{2k} n)$.
+
   This is a corollary of the proof of the previous theorem.
   It suffices to show an $\RNC^d$ algorithm for \PSAT, which is a complete problem for $\NNC^d(\log^k n)$ under logarithmic space many-one reductions.
   By hypothesis, there is an $\NC^d$ algorithm, call it $U$, that decides \UPSAT, which is in $\UNC^d(\log^k n)$.
 
+  Consider the function $f$ from the proof of the previous theorem.
   Instead of choosing $m$ at random in the first step of the function $f$, we will try all possible values of $m$ in parallel in order to find the correct number of satisfying assignments.
   Consider an algorithm, call it $A$, that proceeds as follows on inputs $C$ and $\alpha$.
   \begin{enumerate}
@@ -112,14 +115,15 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
   The probability that $U$ will accept that $C'_m$ is at least $\frac{1}{8}$, by \autoref{lem:vv}, so $A$ will accept with at least that probability (since it accepts if any of the $U(C'_m, \alpha)$ output 1).
   As before, if $C$ has no satisfying extensions then neither does any of the $C'$, so $A$ rejects with probability 1.
 
-  In order to get completeness probability to be greater than $\frac{1}{2}$, we amplify the probability of success of $A$ by running some number of independent instances of $A$ in parallel and accepting if and only if at least one of the instances accepts.
+  In order to get the completeness probability to be greater than $\frac{1}{2}$, we amplify the probability of success of $A$ by running some number of independent instances of $A$ in parallel and accepting if and only if at least one of the instances accepts.
   If each instance has probability at least $\frac{1}{8}$ of accepting, it has probability at most $\frac{7}{8}$ of rejecting.
   If $t$ instances of $A$ are run independently in parallel, the probability that they all reject is $(\frac{7}{8})^t$.
   Thus the probability that at least one accepts is $1 - (\frac{7}{8})^t$.
   This is greater than $\frac{1}{2}$ if $t = 6$.
   Therefore the overall algorithm, call it $A'$, consists of 6 parallel instances of $A$ with a disjunction at the final layer.
 
-  Starting from the final layer, each instance of $A$ consists of a disjunction of $O(\log^k n)$ instances of the $\NC^d$ circuit $U$.
+  Now we determine the efficiency of the algorithm to ensure that it is in $\RNC^d(\log^{2k} n)$.
+  Each instance of $A$ consists of a disjunction of $O(\log^k n)$ instances of the $\NC^d$ circuit $U$.
   The inputs to each of those instances of $U$ are the outputs from $C'_m$, itself a conjunction of two $\NC^d$ circuits (namely, the circuits for $C$ and $h$).
   Hence $A$ is an $\NC^d$ circuit, and the disjunction of six instances of $A$ is also an $\NC^d$ circuit.
   Furthermore, the number of random bits used in this algorithm equals the total number of bits used to choose each of the hash functions $h$.
