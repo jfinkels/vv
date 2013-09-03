@@ -46,7 +46,8 @@ We will examine the following two restrictions of the \textsc{Boolean Formula Sa
   \UPSAT{} is the restriction of the above language to only those pairs for which there is at most one satisfying assignment.
 \end{definition}
 
-\PSAT{} is complete for $\NNC^d(\log^k n)$ and its unambiguous restriction is in $\UNC^d(\log^k n)$.
+\PSAT{} is complete for $\NNC^d(\log^k n)$; its unambiguous restriction is in $\UNC^d(\log^k n)$.
+(When $k = 1$ and $d = 1$, the former problem is equivalent to \textsc{Boolean Formula Evaluation}.)
 
 \begin{definition}
   A collection of functions $\mathcal{H}_{n, m}$ from $\{0, 1\}^n$ to $\{0, 1\}^m$ is a \emph{pairwise independent hash family} if for all distinct $x_1$ and $x_2$ in $\{0, 1\}^n$ and all $y_1$ and $y_2$ in $\{0, 1\}^m$,
