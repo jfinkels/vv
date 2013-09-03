@@ -18,9 +18,16 @@
 \newcommand{\PSAT}{\textsc{$\log^k n$-Partial $\NC^d$ Satisfiability}}
 \newcommand{\UPSAT}{\textsc{Unambiguous $\log^k n$-Partial $\NC^d$ Satisfiability}}
 
+%% Front matter information
+\title{Unambiguous parallel computation with short witnesses}
+\author{Jeffrey Finkelstein}
+
 \begin{document}
 
-These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordpress.com/2010/04/29/cs254-lecture-7-valiant-vazirani} and some of Arora and Barak's explanation.
+\maketitle
+
+This work describes the relationship between problems that have many short witnesses and those that have one short witness, for problems that are verifiable in parallel.
+These proofs follow not the original proof of the Valiant--Vazirani Theorem, but \cite{trevisan10} and \cite{ab09}.
 
 \begin{definition}
   An \emph{$\NC^d$ circuit} is a Boolean circuit with fan-in two, polynomial size, and $O(\log^d n)$ depth.
@@ -32,16 +39,26 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
   $\RNC^d(\log^k n)$ is the class of languages decided by \L-uniform $\NC^d$ circuits augmented with $O(\log^k n)$ bits of randomness that have soundness 1 and completeness $\frac{1}{2}$.
 \end{definition}
 
+We will examine the following two restrictions of the \textsc{Boolean Formula Satisfiability} problem.
+
 \begin{definition}
-  A collection of functions $\mathcal{H}_{n, m}$ from $\{0, 1\}^n$ to $\{0, 1\}^m$ is a \emph{pairwise independent hash family} if
-  \begin{enumerate}
-  \item ...
-  \item ...
-  \end{enumerate}
+  \PSAT{} is the language of all pairs $(C, \alpha)$, where $C$ is an $\NC^d$ circuit with $n$ inputs and $\alpha$ is a partial assignment to all but the first $\log^k n$ inputs of $C$, such that there is an extension of $\alpha$ that satisfies $C$.
+  \UPSAT{} is the restriction of the above language to only those pairs for which there is at most one satisfying assignment.
+\end{definition}
+
+\PSAT{} is complete for $\NNC^d(\log^k n)$ and its unambiguous restriction is in $\UNC^d(\log^k n)$.
+
+\begin{definition}
+  A collection of functions $\mathcal{H}_{n, m}$ from $\{0, 1\}^n$ to $\{0, 1\}^m$ is a \emph{pairwise independent hash family} if for all distinct $x_1$ and $x_2$ in $\{0, 1\}^n$ and all $y_1$ and $y_2$ in $\{0, 1\}^m$,
+  \begin{equation*}
+    \Pr_{h \random \mathcal{H}_{n, m}}\left[h(x_1) = y_1 \land h(x_2) = y_2\right] = \frac{1}{2^{2m}}.
+  \end{equation*}
+
+  A pairwise independent hash family is called \emph{$\NC^d$-explicit} if the function $(h, x) \mapsto h(x)$ is computable in $\NC^d$.
 \end{definition}
 
 \begin{lemma}\label{lem:hash}
-  There is a pairwise independent hash family consisting of functions that are computable by an $\NC^d$ circuit.
+  There is an $\NC^d$-explicit pairwise independent hash family for all $d > ???$.
 \end{lemma}
 
 \begin{lemma}\label{lem:vv}
@@ -51,6 +68,8 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
     \Pr_{h \random \mathcal{H}_{n, m}}\left[\existsu x \in S \colon h(x) = 0^m \right] \geq \frac{1}{8}.
   \end{equation*}
 \end{lemma}
+
+The specific string $0^m$ in the previous lemma is irrelevant; any fixed binary string would work just as well.
 
 \begin{definition}
   If $C$ is a Boolean circuit with inputs $x_1, \dotsc, x_n$, a \emph{partial assignment} to its inputs is a function $\alpha \colon S \to \{0, 1\}$, where $S$ is some subset of $\{x_1, \dotsc, x_n\}$.
@@ -69,13 +88,16 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
   The probabilities are over the uniform random bits used by $f$.
 \end{theorem}
 \begin{proof}
-  Let $\mathcal{H}_{\log^k n, m}$ be a pairwise independent hash family computable in $\NC^d$, as guaranteed by \autoref{lem:hash}.
+  Let $\mathcal{H}_{\log^k n, m}$ be an $\NC^d$-explicit pairwise independent hash family as guaranteed by \autoref{lem:hash}.
   Define the function $f$ as follows on input circuit $C$ and partial assignment given as bits $x_{\log^k n + 1}, \dotsc, x_n$.
   \begin{enumerate}
   \item Choose $m$ uniformly at random from $\{2, \dotsc, \log^k n + 1\}$.
   \item Choose $h$ uniformly at random from $\mathcal{H}_{\log^k n, m}$.
   \item
-    Let $C'(x_1, \dotsc, x_n)$ be the circuit computing $(C(x_1, \dotsc, x_n) = 1) \land (h(x_1 \circ \dotsb \circ x_{\log^k n}) == 0^m)$.
+    Let $C'(x_1, \dotsc, x_n)$ be the circuit computing
+    \begin{equation*}
+      (C(x_1, \dotsc, x_n) = 1) \land (h(x_1 \circ \dotsb \circ x_{\log^k n}) = 0^m).
+    \end{equation*}
     (We only use the the first $\log^k n$ bits of the input in the hash function because we expect a partial assignment to fix the value of the remaining inputs.)
   \item Output $C'$ and the same partial assignment $\alpha$.
   \end{enumerate}
@@ -97,8 +119,8 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
   The ``furthermore'' part of the conclusion follows from the syntactic inclusion $\RNC^d(\log^k n) \subseteq \NNC^d(\log^k n)$, so we will prove that the hypothesis implies $\NNC^d(\log^k n) \subseteq \RNC^d(\log^{2k} n)$.
 
   This is a corollary of the proof of the previous theorem.
-  It suffices to show an $\RNC^d$ algorithm for \PSAT, which is a complete problem for $\NNC^d(\log^k n)$ under logarithmic space many-one reductions.
-  By hypothesis, there is an $\NC^d$ algorithm, call it $U$, that decides \UPSAT, which is in $\UNC^d(\log^k n)$.
+  It suffices to show an $\RNC^d$ algorithm for \PSAT{}, which is a complete problem for $\NNC^d(\log^k n)$ under logarithmic space many-one reductions.
+  By hypothesis, there is an $\NC^d$ algorithm, call it $U$, that decides \UPSAT{}, which is in $\UNC^d(\log^k n)$.
 
   Consider the function $f$ from the proof of the previous theorem.
   Instead of choosing $m$ at random in the first step of the function $f$, we will try all possible values of $m$ in parallel in order to find the correct number of satisfying assignments.
@@ -132,5 +154,8 @@ These proofs follow some of Luca's explanation at \url{http://lucatrevisan.wordp
 \end{proof}
 
 TODO can we use randomness-efficient error reduction to reduce the amount of randomness required down to $O(\log^k n)$, thereby allowing the conclusion $\NNC^d(\log^k n) = \RNC^d(\log^k n)$ in the above corollary?
+
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}
