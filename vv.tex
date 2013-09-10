@@ -142,15 +142,15 @@ The specific string $0^m$ in the previous lemma is irrelevant; any fixed binary 
   If each instance has probability at least $\frac{1}{8}$ of accepting, it has probability at most $\frac{7}{8}$ of rejecting.
   If $t$ instances of $A$ are run independently in parallel, the probability that they all reject is $(\frac{7}{8})^t$.
   Thus the probability that at least one accepts is $1 - (\frac{7}{8})^t$.
-  This is greater than $\frac{1}{2}$ if $t = 6$.
+  This is greater than $\frac{1}{2}$ if $t$ is at least 6.
   Therefore the overall algorithm, call it $A'$, consists of 6 parallel instances of $A$ with a disjunction at the final layer.
 
   Now we determine the efficiency of the algorithm to ensure that it is in $\RNC^d(\log^{2k} n)$.
   Each instance of $A$ consists of a disjunction of $O(\log^k n)$ instances of the $\NC^d$ circuit $U$.
   The inputs to each of those instances of $U$ are the outputs from $C'_m$, itself a conjunction of two $\NC^d$ circuits (namely, the circuits for $C$ and $h$).
   Hence $A$ is an $\NC^d$ circuit, and the disjunction of six instances of $A$ is also an $\NC^d$ circuit.
-  Furthermore, the number of random bits used in this algorithm equals the total number of bits used to choose each of the hash functions $h$.
-  Each hash function requires $O(\log^k n)$ bits, and there are $O(\log^k n)$ of them.
+  Furthermore, the number of random bits used in $A$ equals the total number of bits used to choose each of the hash functions $h$.
+  Each hash function requires $O(\log^k n)$ bits (\textbf{TODO this is a known fact, state it}), and there are $O(\log^k n)$ of them.
   Therefore the total number of random bits required is $O(\log^{2k} n)$.
 \end{proof}
 
