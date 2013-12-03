@@ -139,7 +139,10 @@ The specific string $0^m$ in the previous lemma is irrelevant; any fixed binary 
     \item Choose $h$ uniformly at random from $\mathcal{H}_{\log^k n, m}$.
     \item Let $C'_m$ be the circuit whose construction was described in the previous theorem (that is, step 3 of the definition of $f$).
     \end{enumerate}
-  \item Accept if and only if $\left(\bigvee_{m=2}^{\log^k n + 1} U(C'_m, \alpha)\right) = 1$.
+  \item Accept if and only if
+    \begin{equation*}
+      \bigvee_{m=2}^{\log^k n + 1} U(C'_m, \alpha) = 1.
+    \end{equation*}
   \end{enumerate}
   If there is at least one satisfying extension for $C$, then exactly one of the $m$ will correspond to the correct number of extensions (specifically, there will be exactly one $m$ such that the number of extensions is between $2^{m - 2}$ and $2^{m - 1}$).
   The probability that $U$ will accept that $C'_m$ is at least $\frac{1}{8}$, by \autoref{lem:vv}, so $A$ will accept with at least that probability (since it accepts if any of the $U(C'_m, \alpha)$ output 1).
