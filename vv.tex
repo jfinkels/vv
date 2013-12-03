@@ -112,7 +112,7 @@ The specific string $0^m$ in the previous lemma is irrelevant; any fixed binary 
   The probability that $m$ is chosen such that the number of satisfying assignments to the original circuit $C$ is between $2^{m - 2}$ and $2^{m - 1}$ is $\frac{1}{\log^k n}$.
   Conditioned on that event, the probability that $h$ is chosen as in \autoref{lem:vv} is at least $\frac{1}{8}$.
   Thus if there is an extension of $\alpha$ satisfying $C$ then the probability that there is a unique extension satisfying $C'$ is at least $\frac{1}{8 \log^k n}$.
-  If the original circuit has no satisfying extension, then neither is $C'$, so the probability that $C'$ has a satisfying extension is 0.
+  If the original circuit has no satisfying extension, then neither does $C'$, so the probability that $C'$ has a satisfying extension is 0.
 
   The efficiency of $f$ is merely the efficiency of constructing the relatively simple circuit $C'$, and so can be computed in logarithmic space.
   Finally, $f$ uses $\log \log^k n$ random bits, or $k \log \log n$ bits, to choose $m$ (in binary) and uses $O(\log^k n)$ random bits to choose $h$ (\textbf{TODO explain why: see Pseudorandomness}).
