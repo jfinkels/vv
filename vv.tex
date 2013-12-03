@@ -39,6 +39,13 @@ These proofs follow not the original proof of the Valiant--Vazirani Theorem, but
   $\RNC^d(\log^k n)$ is the class of languages decided by \L-uniform $\NC^d$ circuits augmented with $O(\log^k n)$ bits of randomness that have soundness 1 and completeness $\frac{1}{2}$.
 \end{definition}
 
+\begin{definition}
+  If $C$ is a Boolean circuit with inputs $x_1, \dotsc, x_n$, a \emph{partial assignment} to its inputs is a function $\alpha \colon S \to \{0, 1\}$, where $S$ is some subset of $\{x_1, \dotsc, x_n\}$.
+  The partial assignment is called a \emph{complete assignment}, or simply an \emph{assignment}, if $|S| = n$.
+  For any fixed partial assignment $\alpha$ with domain $S$, an \emph{extension assignment}, or simply an \emph{extension}, is a partial assignment with domain $(\{x_1, \dotsc, x_n\} \setminus S)$.
+  (Thus, if $\beta$ is an extension of $\alpha$, then $\alpha \cup \beta$ is a complete assignment.)
+\end{definition}
+
 We will examine the following two restrictions of the \textsc{Boolean Formula Satisfiability} problem.
 
 \begin{definition}
@@ -78,13 +85,6 @@ We will examine the following two restrictions of the \textsc{Boolean Formula Sa
 \end{lemma}
 
 The specific string $0^m$ in the previous lemma is irrelevant; any fixed binary string would work just as well.
-
-\begin{definition}
-  If $C$ is a Boolean circuit with inputs $x_1, \dotsc, x_n$, a \emph{partial assignment} to its inputs is a function $\alpha \colon S \to \{0, 1\}$, where $S$ is some subset of $\{x_1, \dotsc, x_n\}$.
-  The partial assignment is called a \emph{complete assignment}, or simply an \emph{assignment}, if $|S| = n$.
-  For any fixed partial assignment $\alpha$ with domain $S$, an \emph{extension assignment}, or simply an \emph{extension}, is a partial assignment with domain $(\{x_1, \dotsc, x_n\} \setminus S)$.
-  (Thus, if $\beta$ is an extension of $\alpha$, then $\alpha \cup \beta$ is a complete assignment.)
-\end{definition}
 
 \begin{theorem}[Valiant--Vazirani]
   There is a probabilistic logarithmic space computable function $f$ such that for all $\NC^d$ circuits $C$ on $n$ inputs, and all partial assignments $\alpha$ to all but the first $\log^k n$ of the inputs, the following conditions are satisfied.
