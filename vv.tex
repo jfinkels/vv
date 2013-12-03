@@ -61,6 +61,13 @@ We will examine the following two restrictions of the \textsc{Boolean Formula Sa
 \begin{lemma}\label{lem:hash}
   There is an $\NC^d$-explicit pairwise independent hash family for all $d > ???$.
 \end{lemma}
+\begin{proof}
+  There is a simple construction of an $\NC^2$ pairwise independent hash family.
+  The collection of functions defined by $\mathcal{H}_{n, m} = \left\{h_{A, b} \, \middle| \, h_{A, b}(x) = Ax + b \right\}$, where $A$ is an $m \times n$ Boolean matrix and $b$ is an $m$-dimensional bit vector, is a well-known pairwise independent hash family.
+  Boolean matrix multiplication is computable in $\NC^2$, so this family is $\NC^2$-explicit.
+
+  I believe we can also construct $\NC^0$ pairwise independent hash families, using \cite{ikos08} and \cite{spielman96} \textbf{(TODO explain this)}.
+\end{proof}
 
 \begin{lemma}\label{lem:vv}
   Suppose $n$ and $m$ are positive integers, $\mathcal{H}_{n, m}$ is a pairwise independent hash family, and $S$ is a subset of $\{0, 1\}^n$.
