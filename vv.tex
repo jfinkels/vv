@@ -13,7 +13,6 @@
 \declaretheorem[numberlike=theorem, style=definition]{definition}
 
 %% Custom commands
-\newcommand{\existsu}{\exists !}
 \newcommand{\random}{\overset{R}{\gets}}
 \newcommand{\PSAT}{\textsc{$\log^k n$-Partial $\NC^d$ Satisfiability}}
 \newcommand{\UPSAT}{\textsc{Unambiguous $\log^k n$-Partial $\NC^d$ Satisfiability}}
@@ -80,7 +79,7 @@ We will examine the following two restrictions of the \textsc{Boolean Formula Sa
   Suppose $n$ and $m$ are positive integers, $\mathcal{H}_{n, m}$ is a pairwise independent hash family, and $S$ is a subset of $\{0, 1\}^n$.
   If $2^{m - 2} \leq |S| \leq 2^{m - 1}$ then
   \begin{equation*}
-    \Pr_{h \random \mathcal{H}_{n, m}}\left[\existsu x \in S \colon h(x) = 0^m \right] \geq \frac{1}{8}.
+    \Pr_{h \random \mathcal{H}_{n, m}}\left[\text{there is a unique } x \in S \text{ such that } h(x) = 0^m \right] \geq \frac{1}{8}.
   \end{equation*}
 \end{lemma}
 
