@@ -149,9 +149,9 @@ The specific string $0^m$ in the previous lemma is irrelevant; any fixed binary 
   As before, if $C$ has no satisfying extensions then neither does any of the $C'$, so $A$ rejects with probability 1.
 
   In order to get the completeness probability to be greater than $\frac{1}{2}$, we amplify the probability of success of $A$ by running some number of independent instances of $A$ in parallel and accepting if and only if at least one of the instances accepts.
-  If each instance has probability at least $\frac{1}{8}$ of accepting, it has probability at most $\frac{7}{8}$ of rejecting.
-  If $t$ instances of $A$ are run independently in parallel, the probability that they all reject is $(\frac{7}{8})^t$.
-  Thus the probability that at least one accepts is $1 - (\frac{7}{8})^t$.
+  If the probability that each instance accepts is at least $\frac{1}{8}$, then the probability that each instance rejects is less than $\frac{7}{8}$.
+  If $t$ instances of $A$ are run independently in parallel, the probability that they all reject is less than $(\frac{7}{8})^t$.
+  Thus the probability that at least one accepts is at least $1 - (\frac{7}{8})^t$.
   This is greater than $\frac{1}{2}$ if $t$ is at least 6.
   Therefore the overall algorithm, call it $A'$, consists of 6 parallel instances of $A$ with a disjunction at the final layer.
 
